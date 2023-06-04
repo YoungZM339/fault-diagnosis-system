@@ -11,8 +11,8 @@ def upload(request):
         uploaded_file = request.FILES.get('file', None)
         if uploaded_file is not None:
             fs = FileSystemStorage()
-            fs.save(uploaded_file.name, uploaded_file)
-            json_data = {"code": 1, "msg": "文件上传成功", "file": {"name": uploaded_file.name},
+            file_name = fs.save(uploaded_file.name, uploaded_file)
+            json_data = {"code": 1, "msg": "文件上传成功", "file": {"name": file_name},
                          "time": timezone.now()}
         else:
             json_data = {"code": 0, "msg": "请检查表单提交中的name属性是否是file或者检查是否正确上传了文件"}
