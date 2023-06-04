@@ -33,9 +33,18 @@ def model_val(request):
 
 
 @csrf_exempt
-def test_result(request):
+def test_train(request):
     if request.method == 'POST':
         json_data = train()
+        return JsonResponse(json_data)
+    else:
+        return HttpResponse("请使用POST请求数据")
+
+
+@csrf_exempt
+def test_detect(request):
+    if request.method == 'POST':
+        json_data = detect()
         return JsonResponse(json_data)
     else:
         return HttpResponse("请使用POST请求数据")
