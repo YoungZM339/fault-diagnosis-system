@@ -3,7 +3,6 @@ import json
 
 def train():
     # 此处为训练代码
-    pass
     json_data = {
         "item": [
             {"precision": 0.92, "recall": 0.92, "f1-score": 0.92, "support": 0.9},
@@ -13,7 +12,7 @@ def train():
         ],
         "avg": {"precision": 0.94, "recall": 0.94, "f1-score": 0.94, "support": 0.9},
     }
-    return json.dumps(json_data)
+    return json_data
 
 
 if __name__ == "__main__":
