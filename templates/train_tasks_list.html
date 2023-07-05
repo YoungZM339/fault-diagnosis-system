@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>训练任务列表</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>创建用户</th>
+                <th>创建时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in train_tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.owner }}</td>
+                    <td>{{ task.created }}</td>
+                    <td>{{ task.get_train_status_display }}</td>
+                    <td>
+                        <a href="{% url 'diagnosis_task_detail' task.id %}" class="btn btn-primary">查询详细内容</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">没有找到训练任务</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
