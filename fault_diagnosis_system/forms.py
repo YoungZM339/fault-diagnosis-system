@@ -22,3 +22,4 @@ class TrainTaskForm(forms.ModelForm):
     class Meta:
         model = models.TrainTask
         fields = ['uploaded_file']
+

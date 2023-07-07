@@ -1,22 +1,21 @@
+import time
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
-# from background_task import background
+from django.core.files.base import ContentFile
+from fault_diagnosis_ml import pre_test_json
+from fault_diagnosis_ml import train
 import json
+from threading import Thread
 
 
 @login_required
 def index(request):
     return render(request, 'index.html')
-
-
-# @background
-# def diagnosis():
-#     print("诊断任务执行")
-#     pass
 
 
 @login_required
@@ -28,21 +27,32 @@ def upload_diagnosis(request):
             diagnosis_task.owner = request.user
             diagnosis_task.diagnosis_status = "pending"
             diagnosis_task.save()
-            # diagnosis.delay()
+            try:
+                def predict_and_save_result():
+                    diagnosis_task.diagnosis_status = "processing"
+                    diagnosis_task.save()
+                    # 因为速度太快不得不sleep3秒以展现功能
+                    time.sleep(3)
+                    pre_test_json.predict(diagnosis_task.uploaded_file.path, diagnosis_task.id)
+                    with open(f"fault_diagnosis_ml/json/{diagnosis_task.id}.json", "r+") as f:
+                        diagnosis_task.diagnosis_result_file.save(f"{diagnosis_task.id}.json",
+                                                                  ContentFile(f.read(), f.name))
+                    diagnosis_task.diagnosis_status = "completed"
+                    diagnosis_task.save()
+
+                # Run the diagnosis process in a separate thread
+                Thread(target=predict_and_save_result).start()
+                msg = diagnosis_task.uploaded_file.name
+            except:
+                msg = "detect出错，请检查上传文件或者后端运行是否正常"
             return render(request, 'upload_diagnosis.html',
-                          {'form': forms.DiagnosisTaskForm(), 'msg': diagnosis_task.uploaded_file.name})
+                          {'form': forms.DiagnosisTaskForm(), 'msg': msg})
         else:
             return render(request, 'upload_diagnosis.html', {'form': forms.DiagnosisTaskForm(), 'msg': '上传文件错误'})
     elif request.method == 'GET':
         return render(request, 'upload_diagnosis.html', {'form': forms.DiagnosisTaskForm()})
     else:
         return HttpResponse("请求格式不支持")
-
-
-# @background
-# def train():
-#     print("训练任务执行")
-#     pass
 
 
 @login_required
@@ -52,11 +62,27 @@ def upload_train(request):
         if form.is_valid():
             train_task = form.save(commit=False)
             train_task.owner = request.user
-            train_task.diagnosis_status = "pending"
+            train_task.train_status = "pending"
             train_task.save()
-            # train.delay()
+            try:
+                def train_and_save_result():
+                    train_task.train_status = "processing"
+                    train_task.save()
+                    # 因为速度太快不得不sleep3秒以展现功能
+                    time.sleep(3)
+                    train.train(train_task.uploaded_file.path, train_task.id)
+                    with open(f"fault_diagnosis_ml/modles/{train_task.id}.pkl", "rb") as f:
+                        train_task.train_result_file.save(f"{train_task.id}.pkl", ContentFile(f.read(), f.name))
+                    train_task.train_status = "completed"
+                    train_task.save()
+
+                # Run the training process in a separate thread
+                Thread(target=train_and_save_result).start()
+                msg = train_task.uploaded_file.name
+            except:
+                msg = "train出错，请检查上传文件或者后端运行是否正常"
             return render(request, 'upload_train.html',
-                          {'form': forms.TrainTaskForm(), 'msg': train_task.uploaded_file.name})
+                          {'form': forms.TrainTaskForm(), 'msg': msg})
         else:
             return render(request, 'upload_train.html', {'form': forms.TrainTaskForm(), 'msg': '上传文件错误'})
     elif request.method == 'GET':
@@ -110,13 +136,8 @@ def train_task_detail(request, task_id):
         pass
     elif request.method == 'GET':
         task = get_object_or_404(models.TrainTask, id=task_id)
-        if task.train_result_file:
-            json_data = json.load(task.train_result_file.file)
-            json_data = json.dumps(json_data)
-        else:
-            json_data = {}
         return render(request, 'train_task_detail.html',
-                      {'task': task, 'train_result_json_data': json_data})
+                      {'task': task})
     else:
         return HttpResponse("请求格式不支持")
 

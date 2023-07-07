@@ -21,7 +21,7 @@
                     <td>{{ task.created }}</td>
                     <td>{{ task.get_train_status_display }}</td>
                     <td>
-                        <a href="{% url 'diagnosis_task_detail' task.id %}" class="btn btn-primary">查询详细内容</a>
+                        <a href="{% url 'train_task_detail' task.id %}" class="btn btn-primary">查询详细内容</a>
                     </td>
                 </tr>
             {% empty %}

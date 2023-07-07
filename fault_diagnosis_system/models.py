@@ -31,7 +31,7 @@ class DiagnosisTask(models.Model):
 class TrainTask(models.Model):
     owner = models.ForeignKey(User, verbose_name="归属的用户", on_delete=models.CASCADE)
     uploaded_file = models.FileField(upload_to='uploaded_files/', verbose_name="上传的文件")
-    train_result_file = models.FileField(upload_to='diagnosis_result_file/', verbose_name="训练结果文件")
+    train_result_file = models.FileField(upload_to='train_result_file/', verbose_name="训练结果文件")
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
     TRAIN_STATUS_PENDING = 'pending'

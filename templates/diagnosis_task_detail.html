@@ -5,6 +5,7 @@
         <h1>{{ task.name }}</h1>
         <p><strong>上传的文件:</strong> <a href="{{ task.uploaded_file.url }}">{{ task.uploaded_file.name }}</a></p>
         <p><strong>创建的时间:</strong> {{ task.created }}</p>
+        <p><strong>最后状态更新的时间:</strong> {{ task.updated }}</p>
         <p><strong>诊断状态:</strong> {{ task.get_diagnosis_status_display }}</p>
         {% if task.diagnosis_result_file %}
             <p><strong>诊断结果文件:</strong>

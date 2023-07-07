@@ -5,34 +5,12 @@
         <h1>{{ task.name }}</h1>
         <p><strong>上传的文件:</strong> <a href="{{ task.uploaded_file.url }}">{{ task.uploaded_file.name }}</a></p>
         <p><strong>创建的时间:</strong> {{ task.created }}</p>
-        <p><strong>训练状态:</strong> {{ task.get_diagnosis_status_display }}</p>
-        {% if task.diagnosis_result_file %}
+        <p><strong>最后状态更新的时间:</strong> {{ task.updated }}</p>
+        <p><strong>训练状态:</strong> {{ task.get_train_status_display }}</p>
+        {% if task.train_result_file %}
             <p><strong>训练结果文件:</strong>
-                <a href="{{ task.diagnosis_result_file.url }}">{{ task.diagnosis_result_file.name }}</a>
+                <a href="{{ task.train_result_file.url }}">{{ task.train_result_file.name }}</a>
             </p>
-            <p><strong>训练结果图示:</strong></p>
-            <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
-            <div id="my-chart" style="width: 600px; height: 400px;"></div>
-            <script>
-                // 获取JSON数据
-                var json_data = '{{ train_result_json_data|safe }}'
-                // 将JSON字符串转换为JavaScript对象
-                var data = JSON.parse(json_data);
-
-                // 将数据呈现为图表
-                var chart = echarts.init(document.getElementById('my-chart'));
-                chart.setOption({
-                    title: {text: '训练结果'},
-                    tooltip: {},
-                    xAxis: {data: Object.keys(data)},
-                    yAxis: {},
-                    series: [{
-                        name: 'My Data',
-                        type: 'bar',
-                        data: Object.values(data)
-                    }]
-                });
-            </script>
         {% endif %}
 
     </div>
