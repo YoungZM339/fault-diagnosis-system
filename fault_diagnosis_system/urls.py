@@ -25,6 +25,7 @@ urlpatterns = [
                   path('', views.index, name="index"),
                   path('index/', views.index),
                   path('upload_diagnosis/', views.upload_diagnosis, name="upload_diagnosis"),
+                  path('upload_multi_diagnosis/', views.upload_multi_diagnosis, name="upload_multi_diagnosis"),
                   path('upload_train/', views.upload_train, name="upload_train"),
                   path('diagnosis_tasks_list/', views.diagnosis_tasks_list, name="diagnosis_tasks_list"),
                   path('diagnosis_task_detail/<int:task_id>/', views.diagnosis_task_detail,

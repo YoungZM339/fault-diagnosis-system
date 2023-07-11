@@ -15,11 +15,27 @@
                     </div>
                 </div>
             </div>
-        </div>
-        {% if msg %}
-            <div class="alert alert-danger mt-3" role="alert">
-                {{ msg }}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header ">单、多条诊断数据上传</div>
+                    <div class="card-body">
+                        <form action="{% url 'upload_multi_diagnosis' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label class="form-label" for="id_uploaded_file">上传的文件</label><br>
+                            <div class="mb-3">
+                                <input class="form-control" type="file" name="file_field" multiple="multiple">
+                            </div>
+                            <input class="btn btn-primary center" type="submit" value="提交">
+                        </form>
+                    </div>
+                </div>
             </div>
-        {% endif %}
+        </div>
+    </div>
+    {% if msg %}
+        <div class="alert alert-danger mt-3" role="alert">
+            {{ msg }}
+        </div>
+    {% endif %}
     </div>
 {% endblock %}

@@ -56,6 +56,40 @@ def upload_diagnosis(request):
 
 
 @login_required
+def upload_multi_diagnosis(request):
+    if request.method == 'POST':
+        files = request.FILES.getlist('file_field')
+        msg = '单、多条诊断数据上传已经完成'
+        for file in files:
+            diagnosis_task = models.DiagnosisTask(owner=request.user, uploaded_file=file, diagnosis_status='pending')
+            diagnosis_task.save()
+
+            try:
+                def predict_and_save_result():
+                    diagnosis_task.diagnosis_status = "processing"
+                    diagnosis_task.save()
+                    pre_test_json.predict(diagnosis_task.uploaded_file.path, diagnosis_task.id)
+                    with open(f"fault_diagnosis_ml/json/{diagnosis_task.id}.json", "r+") as f:
+                        diagnosis_task.diagnosis_result_file.save(f"{diagnosis_task.id}.json",
+                                                                  ContentFile(f.read(), f.name))
+                    diagnosis_task.diagnosis_status = "completed"
+                    diagnosis_task.save()
+
+                # Run the diagnosis process in a separate thread
+                Thread(target=predict_and_save_result).start()
+                msg = diagnosis_task.uploaded_file.name
+            except:
+                msg = "detect出错，请检查上传文件或者后端运行是否正常"
+                print(msg)
+            time.sleep(0.5)
+
+        return render(request, 'upload_diagnosis.html',
+                      {'form': forms.DiagnosisTaskForm(), 'msg': msg})
+    else:
+        return HttpResponse("请求格式不支持")
+
+
+@login_required
 def upload_train(request):
     if request.method == 'POST':
         form = forms.TrainTaskForm(request.POST, request.FILES)

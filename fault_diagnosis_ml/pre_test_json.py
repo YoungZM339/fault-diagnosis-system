@@ -34,16 +34,16 @@ def fill_mean_value(data, features_m_value):
     return data
 
 
-def preprocess(file_path):
-    data = pd.read_csv(file_path)
+def preprocess(input_file_path):
+    data = pd.read_csv(input_file_path)
     features_m_value = compute_mean_of_feature(data.copy())
     print(f'Features Mean Value: {features_m_value}')
     data = fill_mean_value(data, features_m_value)
     return data
 
 
-def predict(file_path, task_id):
-    dataset = preprocess(file_path)
+def predict(input_file_path, task_id):
+    dataset = preprocess(input_file_path)
     X_test = dataset.iloc[:, 1:].values
 
     with open('fault_diagnosis_ml/modles/voting_clf_model.pkl', 'rb') as file:
@@ -69,7 +69,7 @@ def predict(file_path, task_id):
     # 将 JSON 数据写入文件
     with open(f'fault_diagnosis_ml/json/{task_id}.json', 'w') as f:
         f.write(json_data)
-
+    print(json_data)
     # return y_pred
     return json_data
 
