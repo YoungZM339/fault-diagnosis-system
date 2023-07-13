@@ -13,26 +13,42 @@
             </p>
             <p><strong>诊断结果图示:</strong></p>
             <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
-            <div id="my-chart" style="width: 600px; height: 400px;"></div>
-            <script>
-                // 获取JSON数据
-                var json_data = '{{ diagnosis_result_json_data|safe }}'
-                // 将JSON字符串转换为JavaScript对象
-                var data = JSON.parse(json_data);
+            <div id="barChart" style="width: 600px;height:400px;"></div>
+            <script type="text/javascript">
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('barChart'));
 
-                // 将数据呈现为图表
-                var chart = echarts.init(document.getElementById('my-chart'));
-                chart.setOption({
-                    title: {text: '诊断结果'},
-                    tooltip: {},
-                    xAxis: {data: Object.keys(data)},
-                    yAxis: {},
+                // 指定图表的配置项和数据
+                var data = JSON.parse('{{ diagnosis_result_json_data|safe }}');
+                const count = {};
+                for (const key in data) {
+                    const value = data[key];
+                    if (count[value] === undefined) {
+                        count[value] = 1;
+                    } else {
+                        count[value]++;
+                    }
+                }
+                var option = {
+                    title: {
+                        text: '柱状图示例',
+                        subtext: '数据来自诊断数据'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: Object.keys(count)
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
                     series: [{
-                        name: 'My Data',
-                        type: 'bar',
-                        data: Object.values(data)
+                        data: Object.values(count),
+                        type: 'bar'
                     }]
-                });
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
             </script>
         {% endif %}
 
