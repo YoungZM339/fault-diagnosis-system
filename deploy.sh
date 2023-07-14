@@ -6,4 +6,4 @@ export PYTHONUNBUFFERED=1
 export DJANGO_SETTINGS_MODULE=fault_diagnosis_system.settings
 python ./manage.py makemigrations
 python ./manage.py migrate
-python ./manage.py runserver 0.0.0.0:80000
+python ./manage.py runserver 0.0.0.0:8000
