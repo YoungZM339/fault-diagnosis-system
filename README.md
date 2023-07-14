@@ -13,8 +13,11 @@
 3. 初始化数据库
 
 > python ./manage.py makemigrations fault_diagnosis_system
+
 > python ./manage.py migrate fault_diagnosis_system
+
 > python ./manage.py makemigrations
+
 > python ./manage.py migrate
 
 4. 创建超级用户
