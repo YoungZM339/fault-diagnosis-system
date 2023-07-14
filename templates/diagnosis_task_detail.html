@@ -2,6 +2,7 @@
 
 {% block content %}
     <div class="container">
+        <br>
         <h1>{{ task.name }}</h1>
         <p><strong>上传的文件:</strong> <a href="{{ task.uploaded_file.url }}">{{ task.uploaded_file.name }}</a></p>
         <p><strong>创建的时间:</strong> {{ task.created }}</p>

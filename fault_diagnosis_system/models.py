@@ -70,7 +70,7 @@ class FeedbackTask(models.Model):
                                        default=FEEDBACK_STATUS_PROCESSING)
 
     class Meta:
-        verbose_name = "训练任务"
+        verbose_name = "反馈"
         ordering = ("-created",)
 
     def __str__(self):
