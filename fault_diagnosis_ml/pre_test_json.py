@@ -69,7 +69,6 @@ def predict(input_file_path, task_id):
     # 将 JSON 数据写入文件
     with open(f'fault_diagnosis_ml/json/{task_id}.json', 'w') as f:
         f.write(json_data)
-    print(json_data)
     # return y_pred
     return json_data
 
