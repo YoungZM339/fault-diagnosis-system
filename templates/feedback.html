@@ -29,6 +29,7 @@
             <thead>
             <tr>
                 <th>ID</th>
+                <th>反馈标题</th>
                 <th>创建用户</th>
                 <th>创建时间</th>
                 <th>状态</th>
@@ -39,6 +40,7 @@
             {% for task in tasks %}
                 <tr>
                     <td>{{ task.id }}</td>
+                    <td>{{ task.title }}</td>
                     <td>{{ task.owner }}</td>
                     <td>{{ task.created }}</td>
                     <td>{{ task.get_feedback_status_display }}</td>
