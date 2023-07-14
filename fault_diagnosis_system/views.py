@@ -176,6 +176,37 @@ def train_task_detail(request, task_id):
         return HttpResponse("请求格式不支持")
 
 
+@login_required
+def feedback(request):
+    tasks = models.FeedbackTask.objects.filter(owner=request.user)
+    if request.method == 'POST':
+        form = forms.FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback_task = form.save(commit=False)
+            feedback_task.owner = request.user
+            feedback_task.save()
+            return render(request, 'feedback.html',
+                          {'form': forms.FeedbackForm(), 'tasks': tasks, 'msg': '成功上传反馈:' + feedback_task.title})
+        else:
+            return render(request, 'feedback.html', {'form': forms.FeedbackForm(), 'tasks': tasks, 'msg': '上传错误'})
+    elif request.method == 'GET':
+        return render(request, 'feedback.html', {'form': forms.FeedbackForm(), 'tasks': tasks})
+    else:
+        return HttpResponse("请求格式不支持")
+
+
+@login_required
+def feedback_detail(request, task_id):
+    if request.method == 'POST':
+        pass
+    elif request.method == 'GET':
+        task = get_object_or_404(models.FeedbackTask, id=task_id)
+        return render(request, 'feedback_detail.html',
+                      {'task': task})
+    else:
+        return HttpResponse("请求格式不支持")
+
+
 def user_login(request):
     if request.method == 'POST':
         form = forms.LoginForm(request.POST)

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ task.name }}</h1>
+        <p><strong>创建的时间:</strong> {{ task.created }}</p>
+        <p><strong>最后状态更新的时间:</strong> {{ task.updated }}</p>
+        <p><strong>状态:</strong> {{ task.get_feedback_status_display }}</p>
+        <p><strong>反馈标题:</strong> {{ task.title }}</p>
+        <p><strong>反馈内容:</strong> {{ task.content }}</p>
+        {% if task.reply %}
+            <p><strong>答复内容:</strong> {{ task.reply }}</p>
+        {% else %}
+            <p><strong>答复情况：等待答复</strong></p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -23,3 +23,8 @@ class TrainTaskForm(forms.ModelForm):
         model = models.TrainTask
         fields = ['uploaded_file']
 
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = models.FeedbackTask
+        fields = ['title', 'content']

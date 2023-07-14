@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+
+{% block content %}
+    <div class="container">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header ">反馈表单</div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            <button type="submit" class="btn btn-primary center">提交</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% if msg %}
+                <div class="alert alert-danger mt-3" role="alert">
+                    {{ msg }}
+                </div>
+            {% endif %}
+        </div>
+        <br>
+        <table class="table table-striped">
+            <h3>我的反馈</h3>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>创建用户</th>
+                <th>创建时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.owner }}</td>
+                    <td>{{ task.created }}</td>
+                    <td>{{ task.get_feedback_status_display }}</td>
+                    <td>
+                        <a href="{% url 'feedback_detail' task.id %}" class="btn btn-primary">查看</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">没有找到用户反馈</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
