@@ -1,30 +1,42 @@
-# Distributed System Fault Diagnosis
+# Fault Diagnosis System
 
-A Django-based experimental system for diagnosing distributed-system faults with machine-learning models.
+基于 Django 的故障诊断与训练任务原型。用户可上传 CSV 数据执行单次或批量诊断，也可提交训练数据生成模型并在页面中查看任务历史与反馈。
 
-## Overview
+## 功能范围
 
-The project combines data preparation, model training/inference, and a web interface for exploring diagnosis results. Exact features and model behavior depend on the datasets and code in this repository.
+- 用户登录与任务归属。
+- 单次 CSV 诊断上传。
+- 批量 CSV 诊断上传。
+- 训练数据上传与训练任务。
+- 诊断/训练任务列表与详情。
+- 反馈提交与查看。
 
-## Quick start
+## 模型方法
 
-~~~bash
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS/Linux
-source .venv/bin/activate
+训练流程组合决策树、随机森林和 Extra Trees 分类器，并通过投票分类器产生结果。具体特征列、标签格式和预处理规则以 fault_diagnosis_ml/ 中的实现为准。
 
-pip install -r requirements.txt
-python manage.py runserver
-~~~
+## 本地运行
 
-Configure dataset locations and model artifacts locally. Do not commit private logs, credentials, or production traces.
+创建 Python 虚拟环境后执行：
 
-## Evaluation
+    pip install -r requirements.txt
+    python manage.py migrate
+    python manage.py runserver
 
-Document the dataset split, label definitions, model version, random seed, and per-class metrics for each experiment. A high aggregate score alone is not sufficient evidence for reliable diagnosis.
+使用自己准备的、已脱敏的 CSV 样本验证上传格式。上线前不要将真实设备数据、客户数据或训练产物提交到仓库。
 
-## Status
+## 任务执行边界
 
-Research/educational software. Diagnosis results require operational and domain validation before being used to respond to real incidents.
+当前后台工作由 Django 进程内 Python 线程执行。这意味着：
+
+- 服务重启可能中断正在执行的任务；
+- 没有队列、重试或跨进程调度保障；
+- 高并发、长时间训练和生产任务应迁移到独立任务队列/工作进程。
+
+## 风险说明
+
+该项目是机器学习诊断原型。分类结果需要结合设备上下文、数据质量和领域专家审查，不能作为安全关键设备的自动处置依据。
+
+## 许可证
+
+请参阅仓库中的 LICENSE 文件。
