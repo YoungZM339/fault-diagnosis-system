@@ -1,57 +1,30 @@
-# fault_diagnosis_system
+# Distributed System Fault Diagnosis
 
-> Distributed System Fault Diagnosis System based on Machine Learning
+A Django-based experimental system for diagnosing distributed-system faults with machine-learning models.
 
-![https://scikit-learn.org/stable/_static/scikit-learn-logo-small.png](https://scikit-learn.org/stable/_static/scikit-learn-logo-small.png)
+## Overview
 
-![License](https://img.shields.io/github/license/youngzm339/fault-diagnosis-system)
-![Issues](https://img.shields.io/github/issues/youngzm339/fault-diagnosis-system)
-![Stars](https://img.shields.io/github/stars/youngzm339/fault-diagnosis-system)
+The project combines data preparation, model training/inference, and a web interface for exploring diagnosis results. Exact features and model behavior depend on the datasets and code in this repository.
 
-## 运行前准备
+## Quick start
 
-1. 安装必备依赖
+~~~bash
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
 
-    `
-    sudo apt install python3 python3 python-is-python3 -y
-    `
+pip install -r requirements.txt
+python manage.py runserver
+~~~
 
-    `
-    pip install requirements.txt
-    `
+Configure dataset locations and model artifacts locally. Do not commit private logs, credentials, or production traces.
 
-2. 设置了环境变量
+## Evaluation
 
-    `
-    DJANGO_SETTINGS_MODULE=fault_diagnosis_system.settings
-    `
+Document the dataset split, label definitions, model version, random seed, and per-class metrics for each experiment. A high aggregate score alone is not sufficient evidence for reliable diagnosis.
 
-3. 初始化数据库
+## Status
 
-    `
-    python ./manage.py makemigrations fault_diagnosis_system
-    `
-
-    `
-    python ./manage.py migrate fault_diagnosis_system
-    `
-
-    `
-    python ./manage.py makemigrations
-    `
-
-    `
-    python ./manage.py migrate
-    `
-
-4. 创建超级用户
-
-    `
-    python ./manage.py createsuperuser
-    `
-  
-5. 启动Django
-
-    `
-    python ./manage.py runserver 127.0.0.1:8000
-    `
+Research/educational software. Diagnosis results require operational and domain validation before being used to respond to real incidents.
